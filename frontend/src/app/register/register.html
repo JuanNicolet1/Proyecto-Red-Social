@@ -1,0 +1,39 @@
+
+<div class="container mt-5 w-50">
+    <form (ngSubmit)="registro()" class="card p-4 shadow mi-form">
+      <h2 class="mb-3"> Registrate </h2>
+      <input [(ngModel)]="nombre" name="nombre" type="name" placeholder="Nombre" required class="form-control mb-3">
+      @if(!nombre){
+        <p class="error mb-3">{{errorMessageNombre}}</p>
+      }
+      <input [(ngModel)]="apellido" name="apellido" type="name" placeholder="Apellido" required class="form-control mb-3">
+      <input [(ngModel)]="fecha_nacimiento" name="fecha_nacimiento" type="date" placeholder="Fecha de Nacimiento" required class="form-control mb-3">
+      @if(!fecha_nacimiento){
+        <p class="error mb-3">{{errorMessageNacimiento}}</p>
+      }
+      <input [(ngModel)]="email" name="email" type="email" placeholder="Email" required class="form-control mb-3">
+      @if(!email){
+        <p class="error mb-3">{{errorMessageEmail}}</p>
+      }
+      <input [(ngModel)]="username" name="username" type="text" placeholder="Usuario" required class="form-control mb-3">
+      @if(!username){
+        <p class="error mb-3">{{errorMessageUsername}}</p>
+      }
+      <input [(ngModel)]="password" name="password" type="password" placeholder="Contraseña" required class="form-control mb-3">
+      @if(!password){
+        <p class="error mb-3">{{errorMessageConstrasena}}</p>
+      }
+      <input [(ngModel)]="password2" name="password2" type="password" placeholder="Contraseña" required class="form-control mb-3">
+      @if(!password2){
+        <p class="error mb-3">{{errorMessageConstrasena}}</p>
+      }
+      @if(password !== password2){
+        <p class="error mb-3">{{errorMessageConstrasenas}}</p>
+      }
+      <input [(ngModel)]="descripcion" name="descripcion" type="description" placeholder="Descripción" required class="form-control mb-3">
+      <p>{{mensajeExito}}</p>
+      <button type="submit" class="btn btn-primary mi-boton mb-3">Registrarse</button>
+      <a class="link-login" href="login">¿Ya tenés una cuenta? Inicia Sesión acá</a>
+      
+    </form>
+</div>
