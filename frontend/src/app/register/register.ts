@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Nav } from '../nav/nav';
+import { environment } from '../../environments/environments';
 
 @Component({
   selector: 'app-register',
@@ -38,6 +39,8 @@ export class Register {
   datos_puestos = false;
   errorMessageDescripcion = '';
   error = false;
+
+  private apiUrl = environment.apiUrl;
 
   constructor(private router: Router, private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
@@ -130,7 +133,7 @@ export class Register {
 
     
       console.log("a")
-        this.http.post('http://localhost:3000/autenticacion/register', formData 
+        this.http.post(`${this.apiUrl}/register`, formData 
         ).subscribe({
           next: async (response) => {
             this.mensajeExito = "Registro exitoso.";

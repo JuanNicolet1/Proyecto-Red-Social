@@ -3,6 +3,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Nav } from '../nav/nav';
+import { environment } from '../../environments/environments';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,8 @@ export class Login {
   error = false;
   errorMessage = '';
   datos_puestos = false;
+
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
@@ -38,7 +41,7 @@ export class Login {
     }
 
     if(this.datos_puestos){
-      this.http.post('http://localhost:3000/autenticacion/login', {
+      this.http.post(`${this.apiUrl}/login`, {
       email: this.email,
       password: this.password
     }).subscribe({
