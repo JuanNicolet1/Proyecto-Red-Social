@@ -41,7 +41,7 @@ export class Login {
     }
 
     if(this.datos_puestos){
-      this.http.post(`${this.apiUrl}/login`, {
+      this.http.post(`${this.apiUrl}/autenticacion/login`, {
       email: this.email,
       password: this.password
     }).subscribe({
