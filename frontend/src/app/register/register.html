@@ -1,39 +1,80 @@
+<app-nav></app-nav>
 
-<div class="container mt-5 w-50">
-    <form (ngSubmit)="registro()" class="card p-4 shadow mi-form">
-      <h2 class="mb-3"> Registrate </h2>
-      <input [(ngModel)]="nombre" name="nombre" type="name" placeholder="Nombre" required class="form-control mb-3">
-      @if(!nombre){
-        <p class="error mb-3">{{errorMessageNombre}}</p>
-      }
-      <input [(ngModel)]="apellido" name="apellido" type="name" placeholder="Apellido" required class="form-control mb-3">
-      <input [(ngModel)]="fecha_nacimiento" name="fecha_nacimiento" type="date" placeholder="Fecha de Nacimiento" required class="form-control mb-3">
-      @if(!fecha_nacimiento){
-        <p class="error mb-3">{{errorMessageNacimiento}}</p>
-      }
-      <input [(ngModel)]="email" name="email" type="email" placeholder="Email" required class="form-control mb-3">
-      @if(!email){
-        <p class="error mb-3">{{errorMessageEmail}}</p>
-      }
-      <input [(ngModel)]="username" name="username" type="text" placeholder="Usuario" required class="form-control mb-3">
-      @if(!username){
-        <p class="error mb-3">{{errorMessageUsername}}</p>
-      }
-      <input [(ngModel)]="password" name="password" type="password" placeholder="Contraseña" required class="form-control mb-3">
-      @if(!password){
-        <p class="error mb-3">{{errorMessageConstrasena}}</p>
-      }
-      <input [(ngModel)]="password2" name="password2" type="password" placeholder="Contraseña" required class="form-control mb-3">
-      @if(!password2){
-        <p class="error mb-3">{{errorMessageConstrasena}}</p>
-      }
-      @if(password !== password2){
-        <p class="error mb-3">{{errorMessageConstrasenas}}</p>
-      }
-      <input [(ngModel)]="descripcion" name="descripcion" type="description" placeholder="Descripción" required class="form-control mb-3">
-      <p>{{mensajeExito}}</p>
-      <button type="submit" class="btn btn-primary mi-boton mb-3">Registrarse</button>
-      <a class="link-login" href="login">¿Ya tenés una cuenta? Inicia Sesión acá</a>
+<div class="container mt-5 d-flex justify-content-center">
+  <form (ngSubmit)="registro()" class="card p-4 shadow-lg mi-form" style="width: 420px; border-radius: 1rem; background-color: #f8f9fa;">
+    <h2 class="mb-4 text-center fw-bold text-primary">Registrate</h2>
+
+    <div class="text-center mb-3">
       
-    </form>
+      <div class="position-relative d-inline-block">
+        <label for="imagen" class="form-label fw-semibold"><img 
+          [src]="imageUrl" 
+          alt="Imagen de perfil" 
+          width="120" 
+          height="120" 
+          class="rounded-circle border border-3 border-primary mb-2"
+          style="object-fit: cover;"
+        ></label>
+        <input id="imagen" type="file" accept="image/*" (change)="selectImage($event)" hidden>
+        @if(imagenError){
+          <p class="error text-danger small mb-2">{{errorMessageFile}}</p>
+        }
+      </div>
+      
+    </div>
+
+    <input [(ngModel)]="nombre" name="nombre" type="text" placeholder="Nombre" required class="form-control mb-2">
+    @if(!nombre){
+      <p class="error text-danger small mb-2">{{errorMessageNombre}}</p>
+    }
+
+    <input [(ngModel)]="apellido" name="apellido" type="text" placeholder="Apellido" required class="form-control mb-2">
+
+    <input [(ngModel)]="fecha_nacimiento" name="fecha_nacimiento" type="date" required class="form-control mb-2">
+    @if(!fecha_nacimiento){
+      <p class="error text-danger small mb-2">{{errorMessageNacimiento}}</p>
+    }
+
+    <input [(ngModel)]="email" name="email" type="email" placeholder="Correo electrónico" required class="form-control mb-2">
+    @if(!email){
+      <p class="error text-danger small mb-2">{{errorMessageEmail}}</p>
+    }
+
+    <input [(ngModel)]="username" name="username" type="text" placeholder="Nombre de usuario" required class="form-control mb-2">
+    @if(!username){
+      <p class="error text-danger small mb-2">{{errorMessageUsername}}</p>
+    }
+
+    <input [(ngModel)]="password" name="password" type="password" placeholder="Contraseña" required class="form-control mb-2">
+    @if(!password){
+      <p class="error text-danger small mb-2">{{errorMessageConstrasena}}</p>
+    }
+
+    @if(error){
+      <p class="error text-danger small mb-2">{{errorMessage}}</p>
+    }
+
+    <input [(ngModel)]="password2" name="password2" type="password" placeholder="Repetir contraseña" required class="form-control mb-2">
+    @if(!password2){
+      <p class="error text-danger small mb-2">{{errorMessageConstrasena}}</p>
+    }
+
+    @if(password !== password2){
+      <p class="error text-danger small mb-2">{{errorMessageConstrasenas}}</p>
+    }
+
+    <textarea [(ngModel)]="descripcion" name="descripcion" rows="3" placeholder="Descripción" required class="form-control mb-3"></textarea>
+
+    <p class="text-success text-center fw-semibold">{{mensajeExito}}</p>
+
+    <button type="submit" class="btn btn-primary w-100 mi-boton mb-3" style="border-radius: 50px; transition: 0.3s;">
+      Registrarse
+    </button>
+
+    <div class="text-center">
+      <a class="link-login text-decoration-none" href="login">
+        ¿Ya tenés una cuenta? Iniciá sesión
+      </a>
+    </div>
+  </form>
 </div>

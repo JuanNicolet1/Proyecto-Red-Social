@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Type } from 'class-transformer'; // Transforma a valores
 import { IsNotEmpty, IsString, MinLength, IsEmail, IsDate } from 'class-validator';
 
 export class CrearUsuarioDto {
@@ -11,7 +11,7 @@ export class CrearUsuarioDto {
   apellido: string;
 
   @IsNotEmpty({ message: 'El correo electrónico es obligatorio' })
-  @IsEmail({}, { message: 'El correo electrónico no es válido' }) // Ejemplo de validación
+  @IsEmail({}, { message: 'El correo electrónico no es válido' })
   email: string;
 
   @IsNotEmpty({ message: 'El nombre de usuario es obligatorio' })
@@ -20,7 +20,7 @@ export class CrearUsuarioDto {
 
   @IsNotEmpty({ message: 'La contraseña es obligatoria' })
   @IsString()
-  @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres' }) // Ejemplo de validación
+  @MinLength(8, { message: 'La contraseña debe tener al menos 6 caracteres' })
   password: string;
 
   @IsNotEmpty({ message: 'La fecha de nacimiento es obligatorio' })
@@ -31,4 +31,12 @@ export class CrearUsuarioDto {
   @IsNotEmpty({ message: 'Sin descripcion' })
   @IsString()
   descripcion: string;
+
+  @IsNotEmpty({ message: 'Sin rol' })
+  @IsString()
+  rol?: string;
+
+  @IsNotEmpty({ message: 'Sin imagen' })
+  @IsString()
+  imagenPerfil: string;
 }

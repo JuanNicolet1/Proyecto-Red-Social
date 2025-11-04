@@ -1,16 +1,30 @@
-<div class="container mt-5 w-50">
-    <form (ngSubmit)="login()" class="card p-4 shadow mi-form">
-      <h2 class="mb-3"> Inicia Sesión </h2>
+<app-nav></app-nav>
+
+<div class="container mt-5 d-flex justify-content-center">
+  <form (ngSubmit)="login()" class="card p-4 shadow-lg mi-form" style="width: 420px; border-radius: 1rem; background-color: #f8f9fa;">
+    <h2 class="mb-4 text-center fw-bold text-primary">Inicia Sesión</h2>
       <input [(ngModel)]="email" name="email" type="email" placeholder="Email" required class="form-control mb-3">
       @if(!email){
-        <p class="error mb-3">{{errorMessageEmail}}</p>
+        <p class="error text-danger small mb-3">{{errorMessageEmail}}</p>
       }
       <input [(ngModel)]="password" name="password" type="password" placeholder="Contraseña" required class="form-control mb-3">
       @if(!password){
-        <p class="error mb-3">{{errorMessageContrasena}}</p>
+        <p class="error text-danger small mb-3">{{errorMessageContrasena}}</p>
       }
-      <button type="submit" class="btn btn-primary mi-boton mb-3">Ingresar</button>
-      <a class="link-login" href="registro">¿No tenés una cuenta? Registrate acá</a>
+
+      @if(error){
+      <p class="error text-danger small mb-3">{{errorMessage}}</p>
+      }
       
+      <button type="submit" class="btn btn-primary w-100 mi-boton mb-3" style="border-radius: 50px; transition: 0.3s;">
+      Ingresar
+      </button>
+      
+      <div class="text-center">
+      <a class="link-login text-decoration-none" href="registro">
+        ¿No tenés una cuenta? Registrate acá
+      </a>
+      </div>
+
     </form>
 </div>

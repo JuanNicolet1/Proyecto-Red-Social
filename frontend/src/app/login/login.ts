@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { Nav } from '../nav/nav';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],
+  imports: [FormsModule, Nav],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -14,10 +16,11 @@ export class Login {
   errorMessageEmail = '';
   errorMessageContrasena = '';
   mensajeExito = '';
+  error = false;
   errorMessage = '';
   datos_puestos = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   login() {
     if(!this.email){
@@ -40,9 +43,20 @@ export class Login {
       password: this.password
     }).subscribe({
       next: (response: any) => {
-        this.mensajeExito = 'Inicio de sesión exitoso';
-        this.errorMessage = '';
+        this.errorMessage = 'Contraseña';
       },
-    })
+      error: (err) => {
+        this.error = true;
+
+        this.cdr.detectChanges();
+        if (err.error.message === 'El usuario no existe') {
+          this.errorMessage = 'El usuario no existe';
+        } else if (err.error.message === 'Contraseña incorrecta') {
+          this.errorMessage = 'Contraseña incorrecta';
+        } else {
+          this.errorMessage = 'Nombre de usuario o contraseña incorrectos';
+        }
+      }
+    });  
   }}
 }

@@ -24,8 +24,17 @@ export class User {
   @Prop({ required: true })
   fecha_nacimiento: Date;
 
-  @Prop({ required: true })
+  @Prop({ required: true})
   descripcion: string;
+
+  @Prop({ required: true, default: 'Usuario'  })
+  rol: string;
+
+  @Prop({ default: null })
+  imagenPerfil?: string;
+
+  @Prop({ default: null })
+  publicId?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

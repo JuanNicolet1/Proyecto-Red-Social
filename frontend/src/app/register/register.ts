@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Nav } from '../nav/nav';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule],
+  imports: [FormsModule, Nav],
   standalone: true,
   templateUrl: './register.html',
   styleUrl: './register.css',
@@ -18,7 +20,10 @@ export class Register {
   password = '';
   password2 = '';
   descripcion = '';
+  rol = "Usuario";
   fecha_nacimiento = '';
+  image: File | null = null;
+  imageUrl: String | null = null;
   errorMessage = '';
   errorMessageEmail = '';
   errorMessageConstrasena = '';
@@ -27,11 +32,39 @@ export class Register {
   errorMessageApellido = '';
   errorMessageNacimiento = '';
   errorMessageUsername = '';
+  imagenError = false;
+  errorMessageFile = ''
   mensajeExito = '';
   datos_puestos = false;
   errorMessageDescripcion = '';
+  error = false;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient, private cdr: ChangeDetectorRef) {}
+
+  validarPassword(password: string): boolean {
+    const regex = /^(?=.*[0-9])(?=.*[\W_]).{8,}$/;
+    return regex.test(password);
+  }
+
+    selectImage(event: Event){
+      const input = event.target as HTMLInputElement;
+      if(input.files && input.files[0]){
+        const file = input.files[0]
+        
+
+        if(file.size > 5 * 1024* 1024){
+          this.imagenError = true
+          this.cdr.detectChanges();
+          this.errorMessageFile = "La imagen debe ser de menor tamaño"
+        }
+
+        this.image = file
+
+        this.imageUrl = URL.createObjectURL(file);
+
+      }
+    }
+
 
    registro() {
     if(!this.email){
@@ -74,19 +107,31 @@ export class Register {
       this.datos_puestos = false;
     }
 
+    if (!this.validarPassword(this.password)) {
+      this.error = true;
+      this.errorMessage = 'La contraseña debe tener al menos 8 caracteres, un número y un signo.';
+      return;
+    }
+
     
+
+    const formData = new FormData();
+    formData.append('nombre', this.nombre);
+    formData.append('apellido', this.apellido);
+    formData.append('email', this.email);
+    formData.append('username', this.username);
+    formData.append('password', this.password);
+    formData.append('descripcion', this.descripcion);
+    formData.append('fecha_nacimiento', this.fecha_nacimiento);
+    formData.append('rol', this.rol);
+    if(this.image){
+      formData.append('imagen', this.image);
+    }
 
     
       console.log("a")
-        this.http.post('http://localhost:3000/autenticacion/register', {
-          nombre: this.nombre,
-          apellido: this.apellido,
-          email: this.email,
-          username: this.username,
-          password: this.password,
-          descripcion: this.descripcion,
-          fecha_nacimiento: this.fecha_nacimiento
-        }).subscribe({
+        this.http.post('http://localhost:3000/autenticacion/register', formData 
+        ).subscribe({
           next: async (response) => {
             this.mensajeExito = "Registro exitoso.";
             await this.router.navigate(['/login']);
@@ -98,3 +143,4 @@ export class Register {
     
   }
 }
+
