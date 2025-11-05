@@ -29,6 +29,9 @@
     }
 
     <input [(ngModel)]="apellido" name="apellido" type="text" placeholder="Apellido" required class="form-control mb-2">
+    @if(!apellido){
+      <p class="error text-danger small mb-2">{{errorMessageNombre}}</p>
+    }
 
     <input [(ngModel)]="fecha_nacimiento" name="fecha_nacimiento" type="date" required class="form-control mb-2">
     @if(!fecha_nacimiento){
@@ -50,9 +53,7 @@
       <p class="error text-danger small mb-2">{{errorMessageConstrasena}}</p>
     }
 
-    @if(error){
-      <p class="error text-danger small mb-2">{{errorMessage}}</p>
-    }
+    
 
     <input [(ngModel)]="password2" name="password2" type="password" placeholder="Repetir contraseña" required class="form-control mb-2">
     @if(!password2){
@@ -64,15 +65,22 @@
     }
 
     <textarea [(ngModel)]="descripcion" name="descripcion" rows="3" placeholder="Descripción" required class="form-control mb-3"></textarea>
+    @if(!descripcion){
+      <p class="error text-danger small mb-2">{{errorMessageDescripcion}}</p>
+    }
 
     <p class="text-success text-center fw-semibold">{{mensajeExito}}</p>
+
+    @if(error){
+      <p class="error text-danger small mb-2">{{errorMessage}}</p>
+    }
 
     <button type="submit" class="btn btn-primary w-100 mi-boton mb-3" style="border-radius: 50px; transition: 0.3s;">
       Registrarse
     </button>
 
     <div class="text-center">
-      <a class="link-login text-decoration-none" href="login">
+      <a class="link-login text-decoration-none" routerLink='/login'>
         ¿Ya tenés una cuenta? Iniciá sesión
       </a>
     </div>
