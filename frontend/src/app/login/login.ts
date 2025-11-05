@@ -4,10 +4,12 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Nav } from '../nav/nav';
 import { environment } from '../../environments/environments';
+import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, Nav],
+  imports: [FormsModule, Nav, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -23,7 +25,7 @@ export class Login {
 
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private router: Router) {}
 
   login() {
     if(!this.email){
@@ -45,8 +47,9 @@ export class Login {
       email: this.email,
       password: this.password
     }).subscribe({
-      next: (response: any) => {
+      next: async (response: any) => {
         this.errorMessage = 'Contraseña';
+        await this.router.navigate(['/login']);
       },
       error: (err) => {
         this.error = true;

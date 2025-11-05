@@ -10,5 +10,13 @@ export const routes: Routes = [
 {
     path: 'login', 
     loadComponent: () => import("./login/login").then(m => m.Login)
+},
+{
+    path: 'mi-perfil', 
+    loadComponent: () => import("./mi-perfil/mi-perfil").then(m => m.MiPerfil)
+},
+{
+    path: 'publicaciones', 
+    loadComponent: () => import("./publicaciones/publicaciones").then(m => m.Publicaciones)
 }
 ];

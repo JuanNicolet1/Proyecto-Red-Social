@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { Nav } from '../nav/nav';
 
 @Component({
   selector: 'app-mi-perfil',
-  imports: [],
+  imports: [Nav],
   templateUrl: './mi-perfil.html',
   styleUrl: './mi-perfil.css',
 })

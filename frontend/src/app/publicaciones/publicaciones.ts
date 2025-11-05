@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { Nav } from '../nav/nav';
 
 @Component({
   selector: 'app-publicaciones',
-  imports: [],
+  imports: [Nav],
   templateUrl: './publicaciones.html',
   styleUrl: './publicaciones.css',
 })
