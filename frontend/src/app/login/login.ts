@@ -49,7 +49,7 @@ export class Login {
     }).subscribe({
       next: async (response: any) => {
         this.errorMessage = 'Contraseña';
-        await this.router.navigate(['/login']);
+        await this.router.navigate(['/publicaciones']);
       },
       error: (err) => {
         this.error = true;
