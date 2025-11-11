@@ -1,0 +1,63 @@
+<app-nav-inicio></app-nav-inicio>
+
+<div class="container mt-4">
+
+  <!--Filtros-->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body d-flex flex-wrap justify-content-between align-items-center">
+      <h5 class="mb-2 mb-md-0">Filtrar por:</h5>
+
+      <div class="btn-group mb-2 mb-md-0" role="group">
+        <button class="btn btn-outline-primary" (click)="captarFiltro()"> Fecha</button>
+        <button class="btn btn-outline-danger" (click)="captarFiltro2()"> Likes</button>
+      </div>
+
+      <form class="d-flex" (ngSubmit)="getPerfil(usuario)">
+        <input
+          [(ngModel)]="usuario"
+          type="text"
+          name="nombre"
+          class="form-control me-2"
+          placeholder="Buscar usuario..."
+        />
+        <button type="submit" class="btn btn-success">Buscar</button>
+      </form>
+    </div>
+  </div>
+
+  <!--Lista de publicaciones-->
+  <div class="container mt-4">
+  <div class="d-flex flex-column align-items-center gap-4">
+    @for (pub of publicaciones; track pub._id) {
+      <div class="w-100" style="max-width: 800px;">
+        <app-publicacion [pub]="pub"></app-publicacion>
+
+        <div class="d-flex justify-content-between mt-2">
+          <div>
+            @if (!pub.usuariosLikes.includes(usuarioActual._id)) {
+              <button class="btn btn-success btn-sm" (click)="like(pub._id)">👍 Me gusta</button>
+            } @else {
+              <button class="btn btn-secondary btn-sm" (click)="dislike(pub._id)">💔 Eliminar me gusta</button>
+            }
+          </div>
+
+          <div>
+            @if (usuarioActual.username === pub.usuario || usuarioActual.rol === 'admin') {
+            <button class="btn btn-danger btn-sm" (click)="delete(pub._id, usuarioActual.username)">
+               Eliminar
+            </button>
+          }
+          </div>
+        </div>
+      </div>
+    }
+    <div class="d-flex gap-5">
+      @if(regresar != 0){
+        <button class="btn btn-warning px-4" (click)="volver()">Volver</button>
+      }
+      <button class="btn btn-info px-4" (click)="cargarMas()">Cargar más</button>
+    </div>
+  </div>
+</div>
+
+</div>

@@ -18,5 +18,9 @@ export const routes: Routes = [
 {
     path: 'publicaciones', 
     loadComponent: () => import("./publicaciones/publicaciones").then(m => m.Publicaciones)
+},
+{
+    path: 'inicio', 
+    loadComponent: () => import("./inicio/inicio").then(m => m.Inicio)
 }
 ];

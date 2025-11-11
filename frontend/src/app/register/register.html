@@ -7,9 +7,10 @@
     <div class="text-center mb-3">
       
       <div class="position-relative d-inline-block">
+        <p>Selecciona tu foto de perfil</p>
         <label for="imagen" class="form-label fw-semibold"><img 
           [src]="imageUrl" 
-          alt="Imagen de perfil" 
+          alt="" 
           width="120" 
           height="120" 
           class="rounded-circle border border-3 border-primary mb-2"
@@ -18,6 +19,9 @@
         <input id="imagen" type="file" accept="image/*" (change)="selectImage($event)" hidden>
         @if(imagenError){
           <p class="error text-danger small mb-2">{{errorMessageFile}}</p>
+        }
+        @if(!image){
+          <p class="error text-danger small mb-2">{{errorMessageImagen}}</p>
         }
       </div>
       

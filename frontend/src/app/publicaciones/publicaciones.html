@@ -1,1 +1,58 @@
-<app-nav></app-nav>
+<app-nav-inicio></app-nav-inicio>
+
+<div class="container mt-4">
+  <form (ngSubmit)="publicar()" class="p-4 border rounded bg-light shadow-sm">
+
+    <!-- Título -->
+    <div class="mb-3">
+      <input 
+        [(ngModel)]="titulo" 
+        name="titulo" 
+        type="text" 
+        placeholder="Título de la publicación" 
+        required 
+        class="form-control"
+      >
+    </div>
+
+    <!-- Descripción -->
+    <div class="mb-3">
+      <textarea
+        [(ngModel)]="descripcion" 
+        name="descripcion" 
+        type="text" 
+        placeholder="Descripción" 
+        required 
+        class="form-control"
+      ></textarea>
+    </div>
+
+    <!-- Imagen -->
+    <div class="mb-3 text-center">
+      <p class="mb-2 fw-semibold">Selecciona una imagen</p>
+      <label for="imagen" class="d-inline-block" style="cursor: pointer;">
+        <img 
+          [src]="imageUrl || 'assets/default-image.png'" 
+          alt="" 
+          width="120" 
+          height="120" 
+          class="border border-2 border-primary"
+          style="object-fit: cover;"
+        >
+      </label>
+      <input 
+        id="imagen" 
+        type="file" 
+        accept="image/*" 
+        (change)="selectImage($event)" 
+        hidden
+      >
+    </div>
+
+    <!-- Botón -->
+    <button type="submit" class="btn btn-primary w-100">
+      Publicar
+    </button>
+
+  </form>
+</div>

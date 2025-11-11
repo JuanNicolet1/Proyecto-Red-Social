@@ -1,4 +1,4 @@
-import { Controller, Post, Param, Body, Get, HttpCode, HttpStatus, UseInterceptors, UseGuards, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
+import { Controller, Post, Param, Body, Get, HttpCode, HttpStatus, UseInterceptors, UseGuards, UploadedFile, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, Req } from '@nestjs/common';
 import { AutenticacionService } from './autenticacion.service';
 import { Request } from '@nestjs/common';
 import { AutenticacionGuard } from './autenticacion.guard';
@@ -9,6 +9,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class AutenticacionController {
     constructor(private readonly autenticacionService: AutenticacionService) {}
     
+    // POST para registrar un usuario
     @Post('register')
     @UseInterceptors(FileInterceptor('imagen')) // 'imagen' es el nombre del campo en FormData
     @HttpCode(HttpStatus.CREATED)
@@ -39,6 +40,7 @@ export class AutenticacionController {
       }
     }
 
+    // POST para loguear a un usuario
     @Post('login')
     async login(@Body() body: { email: string; password: string }) {
         try {
@@ -52,7 +54,7 @@ export class AutenticacionController {
 
     
     
-    
+    // GET para obtener los usuario (hecho para testeos)
     @Get()
       async findAll() {
         const users = await this.autenticacionService.findAll();
@@ -61,4 +63,14 @@ export class AutenticacionController {
           return rest;
         });
       }
+
+      // GET para obtener usuarios por id
+      @Get(':id')
+      async findOne(@Param('id') id: string) {
+        const user = await this.autenticacionService.findById(id);
+        if(user){
+        const { passwordHash, ...rest } = user.toObject();
+        return rest;
+        }
+}
 }

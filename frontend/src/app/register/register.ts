@@ -27,6 +27,7 @@ export class Register {
   image: File | null = null;
   imageUrl: String | null = null;
   errorMessage = '';
+  errorMessageImagen = '';
   errorMessageEmail = '';
   errorMessageConstrasena = '';
   errorMessageConstrasenas = '';
@@ -42,6 +43,7 @@ export class Register {
   error = false;
 
   private apiUrl = environment.apiUrl;
+  private apiUrlLocal = environment.apiUrlLocal;
 
   constructor(private router: Router, private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
@@ -71,6 +73,11 @@ export class Register {
 
 
    registro() {
+    if(!this.image){
+      this.errorMessageImagen = "Selecciona una imagen";
+      this.datos_puestos = false;
+    } 
+
     if(!this.email){
       this.errorMessageEmail = "Escribe el Email";
       this.datos_puestos = false;

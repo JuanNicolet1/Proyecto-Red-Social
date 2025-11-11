@@ -1,0 +1,29 @@
+<div class="card shadow-sm p-3 mb-4">
+  <div class="card-body">
+    <div class="d-flex gap-5">
+      <p class="fw-semibold mb-0 text-primary">@{{ pub.usuario }}</p>
+      <p class="text-muted small mb-0">{{ pub.fecha }}</p>
+    </div>
+
+    <!-- Título y descripción -->
+    <h5 class="card-title mt-2">{{ pub.titulo }}</h5>
+    <p class="card-text">{{ pub.descripcion }}</p>
+
+    
+    @if (pub.imagen) {
+      <div class="text-center my-3">
+        <img
+          [src]="pub.imagen"
+          alt="Imagen de publicación"
+          class="img-fluid rounded shadow-sm"
+          style="max-height: 400px; object-fit: cover;"
+        />
+      </div>
+    }
+
+    <div class="d-flex justify-content-start align-items-center mt-2">
+      <p class="mb-0 fs-5 text-danger">❤️ {{ pub.likes }}</p>
+    </div>
+    
+  </div>
+</div>

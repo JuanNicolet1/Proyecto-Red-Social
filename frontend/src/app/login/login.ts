@@ -24,6 +24,7 @@ export class Login {
   datos_puestos = false;
 
   private apiUrl = environment.apiUrl;
+  private apiUrlLocal = environment.apiUrlLocal;
 
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private router: Router) {}
 
@@ -48,19 +49,17 @@ export class Login {
       password: this.password
     }).subscribe({
       next: async (response: any) => {
+      localStorage.setItem('token', response.access_token);
+      localStorage.setItem('usuario', JSON.stringify(response.usuario));
         this.errorMessage = 'Contraseña';
-        await this.router.navigate(['/publicaciones']);
+        await this.router.navigate(['/mi-perfil']);
       },
       error: (err) => {
         this.error = true;
 
         this.cdr.detectChanges();
-        if (err.error.message === 'El usuario no existe') {
-          this.errorMessage = 'El usuario no existe';
-        } else if (err.error.message === 'Contraseña incorrecta') {
-          this.errorMessage = 'Contraseña incorrecta';
-        } else {
-          this.errorMessage = 'Nombre de usuario o contraseña incorrectos';
+        if (err.error.message) {
+          this.errorMessage = 'Credenciales incorrectas';
         }
       }
     });  

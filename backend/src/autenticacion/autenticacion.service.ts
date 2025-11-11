@@ -55,22 +55,32 @@ export class AutenticacionService {
         return createdUser.save();
       }
 
-      async login(identificador: string, password: string): Promise<{ access_token: string }> {
-        const usuario = await this.userModel.findOne({$or: [{ email: identificador }, { username: identificador }]}).exec();
-        if (!usuario) {
-            throw new NotFoundException('El usuario no existe');
-        }
+      async login(identificador: string, password: string): Promise<{ access_token: string, usuario: any }> {
+      const usuario = await this.userModel.findOne({
+        $or: [{ email: identificador }, { username: identificador }]
+      }).exec();
 
-        const contrasena = await bcrypt.compare(password, usuario.passwordHash);
-        if (!contrasena) {
-            throw new NotFoundException('Contraseña incorrecta');
-        }
+      if (!usuario) {
+        throw new NotFoundException('El usuario no existe');
+      }
 
-        const payload = { sub: usuario._id.toString(), username: usuario.username };
-        return {
-        access_token: await this.jwtService.signAsync(payload),
+      const contrasenaValida = await bcrypt.compare(password, usuario.passwordHash);
+      if (!contrasenaValida) {
+        throw new NotFoundException('Contraseña incorrecta');
+      }
+
+      const payload = { sub: usuario._id.toString(), username: usuario.username };
+      const token = await this.jwtService.signAsync(payload);
+
+      // Excluí el hash de la contraseña antes de enviar al front
+      const { passwordHash, ...usuarioSinPassword } = usuario.toObject();
+
+      return {
+        access_token: token,
+        usuario: usuarioSinPassword
       };
     }
+
 
     async updatePerfilImagen(
         userId: string,
