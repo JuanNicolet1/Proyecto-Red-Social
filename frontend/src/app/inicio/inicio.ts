@@ -28,7 +28,7 @@ export class Inicio implements OnInit{
   usuario: string = '';
   usuarioActual : any = {};
   publicacion: any = {};
-  
+
   private apiUrl = environment.apiUrl;
   private apiUrlLocal = environment.apiUrlLocal
   
@@ -117,7 +117,7 @@ export class Inicio implements OnInit{
   }
 
   getPublicacionUsuario(user: string) {
-      this.http.get<any>(`${this.apiUrlLocal}/publicaciones/${user}/usuario`, {
+      this.http.get<any>(`${this.apiUrl}/publicaciones/${user}/usuario`, {
       params: {
         offset: this.offset,
         limit: this.limit
