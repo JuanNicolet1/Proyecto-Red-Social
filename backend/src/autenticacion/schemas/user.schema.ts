@@ -30,6 +30,9 @@ export class User {
   @Prop({ required: true, default: 'Usuario'  })
   rol: string;
 
+  @Prop({ required: true })
+  habilitado: boolean;
+
   @Prop({ default: null })
   imagenPerfil?: string;
 

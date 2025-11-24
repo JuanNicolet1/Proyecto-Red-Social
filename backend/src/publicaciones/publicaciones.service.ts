@@ -86,7 +86,7 @@ export class PublicacionesService {
         offset = 0, limit = 3
     ): Promise<PublicacionDocument[]> {
         let result
-        result = this.publicacionModel.find({ usuario, activo: true})
+        result = this.publicacionModel.find({ usuario, activo: true}).sort({ fecha: -1 })
         
 
         return result.skip(offset).limit(limit).exec()
@@ -137,4 +137,13 @@ export class PublicacionesService {
 
             return publicacionLike;
         }
+
+    async publicacionesPorUsuario(desde: Date, hasta: Date) {
+        return this.publicacionModel.aggregate([
+        { $match: { fecha: { $gte: desde, $lte: hasta } } },
+        { $group: { _id: '$usuario', cantidad: { $sum: 1 } } },
+        { $project: { usuario: '$_id', cantidad: 1, _id: 0 } },
+        { $sort: { cantidad: -1 } }
+        ]).exec();
+    }
 }

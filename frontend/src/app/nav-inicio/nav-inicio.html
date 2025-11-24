@@ -1,6 +1,6 @@
 <div class="nav">
     <nav class="d-flex">
-        <img src="assets/logo.png" alt="Deep Blue logo" width="120" height="120">
+        <img src="assets/logo.png" alt="Deep Blue logo" width="120" height="120" appAgrandarLogo>
 
 
         <h2 class="mt-5 fw-bold text-primary">Deep Blue</h2>
@@ -15,6 +15,15 @@
             <li class="me-3">
                 <a class="text-decoration-none **text-info** fw-bold" routerLink="/inicio">Inicio</a>
             </li>
+            @if (usuarioActual.rol === 'admin') {
+            <li class="me-3">
+                    <a class="text-decoration-none **text-info** fw-bold" routerLink="/estadisticas">
+                        Estadisticas</a>
+            </li>
+                <li class="me-3">
+                    <a class="text-decoration-none **text-info** fw-bold" routerLink="/usuarios">Usuarios</a>
+                </li>
+            }
             </ul>
         </div>
     </nav>

@@ -1,1 +1,32 @@
-<router-outlet />
+@if(cargando){
+    <div class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+}@else {
+  <router-outlet />
+}
+
+<!-- Modal Bootstrap -->
+@if (mostrarModal) {
+  <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow">
+
+        <div class="modal-header">
+          <h5 class="modal-title" style="color: white">Extender sesión</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="logout()"></button>
+        </div>
+
+        <div class="modal-body">
+          <p style="color: white">Tu sesión está por expirar. ¿Deseás extenderla?</p>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="logout()">No</button>
+          <button class="btn btn-primary" (click)="extenderSesion()">Sí, extender</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+}

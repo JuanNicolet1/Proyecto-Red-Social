@@ -1,7 +1,8 @@
-import { Controller, Post, Body, Get, Delete, Query, UseInterceptors, UploadedFile, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Delete, Query, UseInterceptors, UploadedFile, Param, UseGuards } from '@nestjs/common';
 import { PublicacionesService } from './publicaciones.service';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AutenticacionGuard } from 'src/autenticacion/autenticacion.guard';
 
 @Controller('publicaciones')
 export class PublicacionesController {
@@ -9,6 +10,7 @@ export class PublicacionesController {
 
     // Crea una publicación
     @Post('publicacion')
+    @UseGuards(AutenticacionGuard)
     @UseInterceptors(FileInterceptor('imagen'))
     async publicacion(@Body() crearPublicacionDto: CrearPublicacionDto,
     @UploadedFile() file?: Express.Multer.File ) {
@@ -24,6 +26,7 @@ export class PublicacionesController {
     }
 
     @Delete(':id/eliminar/:usuario')
+    @UseGuards(AutenticacionGuard)
     async eliminar(
         @Param('id') id: string,
         @Param('usuario') usuario: string
@@ -37,11 +40,34 @@ export class PublicacionesController {
         }
     }
 
+    @Get('publicaciones-por-usuario')
+    async publicacionesPorUsuario(
+        @Query('desde') desdeStr: string,
+        @Query('hasta') hastaStr: string,
+        ) {
+        const desde = new Date(desdeStr);
+        const hasta = new Date(hastaStr);
+        return await this.publicacionService.publicacionesPorUsuario(desde, hasta);
+    }
+
     // Se muestran las publicaciones
     @Get()
     async inicio() {
         const publicaciones = await this.publicacionService.mostrarPublicaciones();
         return publicaciones;
+    }
+
+    @Get(':id')
+    async inicioId(@Param('id') id: string) {
+        {
+            try {
+                const resultado = await this.publicacionService.mostrarPorId(id);
+                return resultado;
+            } catch (error) {
+                console.error('Error al desactivar publicación:', error);
+                throw error;
+            }
+        }
     }
 
     // Muestra las publicaciones con un filtro
@@ -65,6 +91,7 @@ export class PublicacionesController {
 
     // Dar me gusta
     @Post(':id/like/:usuarioId')
+    @UseGuards(AutenticacionGuard)
     async like(@Param('id') id: string, @Param('usuarioId') usuarioId: string){
         try{
             const like = await this.publicacionService.darLike(id, usuarioId)

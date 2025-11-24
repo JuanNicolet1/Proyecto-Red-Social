@@ -1,0 +1,212 @@
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { environment } from '../../environments/environments';
+import { RegistroPipe } from '../pipes/registro-pipe';
+import { NavInicio } from '../nav-inicio/nav-inicio';
+import { NgClass } from '@angular/common';
+import { HabilitarPipe } from '../pipes/habilitar-pipe';
+
+@Component({
+  selector: 'app-usuarios',
+  imports: [FormsModule, RegistroPipe, HabilitarPipe, NavInicio, NgClass],
+  templateUrl: './usuarios.html',
+  styleUrl: './usuarios.css',
+})
+export class Usuarios implements OnInit{
+  constructor(private http: HttpClient, private router: Router, private cdr: ChangeDetectorRef) {}
+
+  nombre = '';
+    apellido = '';
+    email = '';
+    username = '';
+    password = '';
+    password2 = '';
+    descripcion = '';
+    rol = "Usuario";
+    fecha_nacimiento = '';
+    habilitado: boolean = true;
+    image: File | null = null;
+    imageUrl: String | null = null;
+    errorMessage = '';
+    errorMessageImagen = '';
+    errorMessageEmail = '';
+    errorMessageConstrasena = '';
+    errorMessageConstrasenas = '';
+    errorMessageNombre = '';
+    errorMessageApellido = '';
+    errorMessageNacimiento = '';
+    errorMessageUsername = '';
+    imagenError = false;
+    errorMessageFile = ''
+    mensajeExito = '';
+    datos_puestos = false;
+    errorMessageDescripcion = '';
+    error = false;
+    boton_activo: boolean = false;
+  
+    private apiUrl = environment.apiUrl;
+    private apiUrlLocal = environment.apiUrlLocal;
+    n: number = 1;
+    usuarioActual: any[] = [];
+
+  ngOnInit(): void {
+    this.mostrarUsuarios();
+  }
+
+  onRolChange(e: Event) {
+  console.log('rol cambió a ->', this.rol);
+  }
+
+  async mostrarUsuarios(){
+    this.http.get<any[]>(`${this.apiUrl}/autenticacion`).subscribe({
+      next: (data) => {
+        this.usuarioActual = data;
+      }
+    })
+  }
+
+  async cambiarBoton() {
+    if(this.n===1) {
+      this.n = 2;
+    } else {
+      this.n = 1;
+    }
+  }
+
+  validarPassword(password: string): boolean {
+    const regex = /^(?=.*[0-9])(?=.*[\W_]).{8,}$/;
+    return regex.test(password);
+  }
+
+  selectImage(event: Event){
+      const input = event.target as HTMLInputElement;
+      if(input.files && input.files[0]){
+        const file = input.files[0]
+        
+
+        if(file.size > 5 * 1024* 1024){
+          this.imagenError = true
+          this.cdr.detectChanges();
+          this.errorMessageFile = "La imagen debe ser de menor tamaño"
+        }
+
+        this.image = file
+
+        this.imageUrl = URL.createObjectURL(file);
+
+      }
+    }
+
+
+   registro() {
+    if(!this.image){
+      this.errorMessageImagen = "Selecciona una imagen";
+      this.datos_puestos = false;
+    } 
+
+    if(!this.email){
+      this.errorMessageEmail = "Escribe el Email";
+      this.datos_puestos = false;
+    } 
+
+    if(!this.password){
+      this.errorMessageConstrasena = "Escribe la contraseña";
+      this.datos_puestos = false;
+    }
+
+    if(!this.nombre){
+      this.errorMessageNombre = "Escribe el nombre";
+      this.datos_puestos = false;
+    }
+
+    if(!this.apellido){
+      this.errorMessageApellido = "Escribe el apellido";
+      this.datos_puestos = false;
+    }
+
+    if(!this.username){
+      this.errorMessageUsername = "Escribe el usuario";
+      this.datos_puestos = false;
+    }
+
+    if(!this.fecha_nacimiento){
+      this.errorMessageNacimiento = "Escribe la fecha de nacimiento";
+      this.datos_puestos = false;
+    }
+
+    if(this.password !== this.password2){
+      this.errorMessageConstrasenas = "Las contraseñas no coinciden";
+      this.datos_puestos = false;
+    }
+
+    if(!this.descripcion){
+      this.errorMessageDescripcion = "Escribe una descripción";
+      this.datos_puestos = false;
+    }
+
+    if (!this.validarPassword(this.password)) {
+      this.error = true;
+      this.errorMessage = 'La contraseña debe tener al menos 8 caracteres, un número y un signo.';
+      return;
+    }
+
+    
+    const formData = new FormData();
+    formData.append('nombre', this.nombre);
+    formData.append('apellido', this.apellido);
+    formData.append('email', this.email);
+    formData.append('username', this.username);
+    formData.append('password', this.password);
+    formData.append('descripcion', this.descripcion);
+    formData.append('fecha_nacimiento', this.fecha_nacimiento);
+    formData.append('habilitado', String(this.habilitado));
+    formData.append('rol', this.rol);
+    if(this.image){
+      formData.append('imagen', this.image);
+    }
+
+    console.log([...formData.entries()]);
+      console.log("a")
+        this.http.post(`${this.apiUrl}/autenticacion/register`, formData 
+        ).subscribe({
+          next: async (response) => {
+            this.boton_activo = true;
+            // this.mensajeExito = "Registro exitoso.";
+            this.mensajeExito = 'ok';
+          },
+          error: (error) => {
+            this.mensajeExito = 'error';
+            // this.errorMessage = "Error en el registro. Intenta nuevamente.";
+          }
+        });
+    
+  }
+
+  eliminarUsuario(id: string) {
+    this.http.delete(`${this.apiUrl}/autenticacion/eliminar/${id}`).subscribe({
+      next: async (response) => {
+        this.mensajeExito = "Usuario eliminado exitosamente.";
+        this.mostrarUsuarios();
+      },
+      error: (error) => {
+        this.errorMessage = "Error al eliminar el usuario. Intenta nuevamente.";
+      }
+    });
+  }
+
+  rehabilitarUsuario(id: string) {
+    this.http.post(`${this.apiUrl}/autenticacion/rehabilitar/${id}`, {}).subscribe({
+      next: async (response) => {
+        this.mensajeExito = "Usuario rehabilitado exitosamente.";
+        this.mostrarUsuarios();
+      },
+      error: (error) => {
+        this.errorMessage = "Error al rehabilitar el usuario. Intenta nuevamente.";
+      }
+    });
+  }
+}

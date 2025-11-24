@@ -1,0 +1,20 @@
+#grafico-container {
+  width: 1000px;
+  height: 650px;
+  margin: auto;
+  margin-top: 10px;
+}
+
+#graficoComentariosDia {
+  width: 1000px;
+  height: 650px;
+  margin: auto;
+  margin-top: 10px;
+}
+
+#graficoComentariosPublicacion {
+  width: 1000px;
+  height: 650px;
+  margin: auto;
+  margin-top: 10px;
+}

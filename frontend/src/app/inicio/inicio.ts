@@ -3,22 +3,29 @@ import { OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environments';
 import { Publicacion } from '../publicacion/publicacion';
+import { Router } from '@angular/router';
 import { NavInicio } from '../nav-inicio/nav-inicio';
 import { FormsModule } from '@angular/forms';
+import { Like } from '../directivas/like';
+import { Dislike } from '../directivas/dislike';
+import { FechaPipe } from '../pipes/fecha-pipe';
 import id from '@angular/common/locales/id';
 
 @Component({
   selector: 'app-inicio',
-  imports: [Publicacion, NavInicio, FormsModule],
+  imports: [Publicacion, NavInicio, FormsModule, Like, Dislike, FechaPipe],
   standalone: true,
   templateUrl: './inicio.html',
   styleUrl: './inicio.css',
 })
 export class Inicio implements OnInit{
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   likes = Number
   activo = true;
+  texto = '';
+  editado = false;
+  comentarios_activados = false
   activo_publicacion = false;
   regresar = 0
   publicaciones: any[] = [];
@@ -82,7 +89,12 @@ export class Inicio implements OnInit{
   like(publicacionId: string) {
     const usuarioId = this.usuarioActual._id;
     console.log('ID que se envía al backend:', publicacionId);
-    this.http.post(`${this.apiUrl}/publicaciones/${publicacionId}/like/${usuarioId}`, {}).subscribe({
+    this.http.post(`${this.apiUrl}/publicaciones/${publicacionId}/like/${usuarioId}`, {},
+      {
+      headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }}
+    ).subscribe({
       next: (res) => {
         console.log('Like agregado:', res);
         if(this.filtrar === false){
@@ -154,4 +166,31 @@ export class Inicio implements OnInit{
             this.getPublicaciones("likes");
           }
     }
+
+  comentarios() {
+    this.comentarios_activados = true
+  }
+
+  publicacionGrande(id: string) {
+    this.router.navigate(['/pub-grande', id]);
+  }
+  
+
+  async comentar(pubId: string, texto: string) {
+    const fechaActual = new Date().toISOString();
+    this.http.post(`${this.apiUrl}/comentarios/${pubId}`, {
+      usuario: this.usuarioActual.username,
+      text: this.texto,
+      edit: this.editado,
+      fecha: fechaActual,
+    }).subscribe({
+      next: (response: any) => {
+        console.log('Comentario enviado:', response);
+        this.editado = true;
+      },
+      error: (err) => {
+        console.error('Error al comentar', err);
+      }
+    });
+  }
 }

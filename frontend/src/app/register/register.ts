@@ -41,6 +41,7 @@ export class Register {
   datos_puestos = false;
   errorMessageDescripcion = '';
   error = false;
+  habilitado = true;
 
   private apiUrl = environment.apiUrl;
   private apiUrlLocal = environment.apiUrlLocal;
@@ -135,13 +136,14 @@ export class Register {
     formData.append('descripcion', this.descripcion);
     formData.append('fecha_nacimiento', this.fecha_nacimiento);
     formData.append('rol', this.rol);
+    formData.append('habilitado', this.habilitado.toString());
     if(this.image){
       formData.append('imagen', this.image);
     }
 
     
       console.log("a")
-        this.http.post(`${this.apiUrl}/autenticacion/register`, formData 
+        this.http.post(`${this.apiUrlLocal}/autenticacion/register`, formData 
         ).subscribe({
           next: async (response) => {
             this.mensajeExito = "Registro exitoso.";

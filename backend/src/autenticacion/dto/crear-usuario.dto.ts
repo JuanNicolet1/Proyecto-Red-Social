@@ -1,5 +1,5 @@
-import { Type } from 'class-transformer'; // Transforma a valores
-import { IsNotEmpty, IsString, MinLength, IsEmail, IsDate } from 'class-validator';
+import { Transform, Type } from 'class-transformer'; // Transforma a valores
+import { IsNotEmpty, IsString, MinLength, IsEmail, IsDate, IsBoolean } from 'class-validator';
 
 export class CrearUsuarioDto {
   @IsNotEmpty({ message: 'El nombre es obligatorio' })
@@ -35,6 +35,10 @@ export class CrearUsuarioDto {
   @IsNotEmpty({ message: 'Sin rol' })
   @IsString()
   rol?: string;
+
+  @Transform(({ value }) => value === 'true')
+  @IsBoolean()
+  habilitado: boolean
 
   @IsNotEmpty({ message: 'Sin imagen' })
   @IsString()

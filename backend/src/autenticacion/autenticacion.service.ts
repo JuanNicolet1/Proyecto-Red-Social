@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
@@ -20,7 +20,7 @@ interface Usuario {
 export class AutenticacionService {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,
     private jwtService: JwtService,
-  private cloudinaryService: CloudinaryService) {} // Inyecta el modelo
+    private cloudinaryService: CloudinaryService) {} // Inyecta el modelo
     
       async findOne(username: string): Promise<UserDocument | null> {
         // Busca en la base de datos por nombre de usuario
@@ -32,9 +32,12 @@ export class AutenticacionService {
       }
     
       async findAll(): Promise<UserDocument[]> {
-      return this.userModel.find().exec();
+        return this.userModel.find().exec();
       }
     
+      async findAllHabilitados(): Promise<UserDocument[]> {
+        return this.userModel.find({ habilitado: true }).exec();
+      }
     
       async create(createUserDto: CrearUsuarioDto): Promise<UserDocument> {
         
@@ -51,6 +54,8 @@ export class AutenticacionService {
           apellido: createUserDto.apellido,
           fecha_nacimiento: createUserDto.fecha_nacimiento,
           descripcion: createUserDto.descripcion,
+          rol: createUserDto.rol,
+          habilitado: createUserDto.habilitado,
         });
         return createdUser.save();
       }
@@ -64,12 +69,16 @@ export class AutenticacionService {
         throw new NotFoundException('El usuario no existe');
       }
 
+      if(!usuario.habilitado) {
+        throw new UnauthorizedException('El usuario no está habilitado');
+      }
+
       const contrasenaValida = await bcrypt.compare(password, usuario.passwordHash);
       if (!contrasenaValida) {
         throw new NotFoundException('Contraseña incorrecta');
       }
 
-      const payload = { sub: usuario._id.toString(), username: usuario.username };
+      const payload = { sub: usuario._id.toString(), username: usuario.username, rol: usuario.rol };
       const token = await this.jwtService.signAsync(payload);
 
       // Excluí el hash de la contraseña antes de enviar al front
@@ -81,6 +90,29 @@ export class AutenticacionService {
       };
     }
 
+    async deshabilitar(userId: string): Promise<UserDocument> {
+      const usuario = await this.userModel.findById(userId).exec();
+
+      if (!usuario) {
+        throw new NotFoundException('El usuario no existe');
+      }
+
+      usuario.habilitado = false;
+
+      return usuario.save();
+    }
+
+    async rehabilitar(userId: string): Promise<UserDocument> {
+      const usuario = await this.userModel.findById(userId).exec();
+
+      if (!usuario) {
+        throw new NotFoundException('El usuario no existe');
+      }
+
+      usuario.habilitado = true;
+
+      return usuario.save();
+    }
 
     async updatePerfilImagen(
         userId: string,
@@ -103,4 +135,28 @@ export class AutenticacionService {
 
         return usuario.save();
     }
+
+    async refresh(token: string): Promise<string> {
+      try {
+        // 1. Verificar token (si es inválido o venció, tira error)
+        const payload = this.jwtService.verify(token, {
+          secret: process.env.JWT_SECRET,
+        });
+
+        // 2. Evitar incluir los campos internos
+        const { iat, exp, ...data } = payload;
+
+        // 3. Crear nuevo token con el mismo payload
+        const nuevoToken = this.jwtService.sign(data, {
+          secret: process.env.JWT_SECRET,
+          expiresIn: '15m',
+        });
+
+        return nuevoToken;
+
+      } catch (error) {
+        throw new UnauthorizedException('Token inválido o expirado');
+      }
+    }
+
 }

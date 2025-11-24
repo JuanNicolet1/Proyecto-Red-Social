@@ -14,7 +14,7 @@ import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '15m' },
     }),
     CloudinaryModule
   ],

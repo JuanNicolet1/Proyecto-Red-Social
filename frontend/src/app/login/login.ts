@@ -6,6 +6,7 @@ import { Nav } from '../nav/nav';
 import { environment } from '../../environments/environments';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,9 @@ export class Login {
   private apiUrl = environment.apiUrl;
   private apiUrlLocal = environment.apiUrlLocal;
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private router: Router) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private router: Router,
+    private loginService: LoginService
+  ) {}
 
   login() {
     if(!this.email){
@@ -51,14 +54,18 @@ export class Login {
       next: async (response: any) => {
       localStorage.setItem('token', response.access_token);
       localStorage.setItem('usuario', JSON.stringify(response.usuario));
-        this.errorMessage = 'Contraseña';
+        this.errorMessage = '';
+        this.loginService.notifyTokenUpdated();
         await this.router.navigate(['/mi-perfil']);
       },
       error: (err) => {
         this.error = true;
 
         this.cdr.detectChanges();
-        if (err.error.message) {
+        if (err.error?.message === 'El usuario no está habilitado') {
+          this.errorMessage = 'Tu cuenta está deshabilitada.';
+        }
+        else if (err.error.message) {
           this.errorMessage = 'Credenciales incorrectas';
         }
       }

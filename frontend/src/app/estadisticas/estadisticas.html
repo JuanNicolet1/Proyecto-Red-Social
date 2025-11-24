@@ -1,0 +1,112 @@
+<app-nav-inicio></app-nav-inicio>
+
+<div class="container mt-4">
+
+  <!-- Filtro para Publicaciones -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+      <h5 class="mb-3"  style="color:white">Filtrar Publicaciones por Fecha</h5>
+
+      <div class="row g-3 align-items-end">
+        <div class="col-sm-4">
+          <label class="form-label">Desde</label>
+          <input type="date" [(ngModel)]="desde" class="form-control" />
+        </div>
+
+        <div class="col-sm-4">
+          <label class="form-label">Hasta</label>
+          <input type="date" [(ngModel)]="hasta" class="form-control" />
+        </div>
+
+        <div class="col-sm-4">
+          <button class="btn btn-primary w-100" (click)="aplicarFiltro()">Filtrar</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Gráfico Publicaciones -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="mb-3" style="color: white">Publicaciones por usuario</h5>
+      <canvas id="graficoPublicaciones"></canvas>
+    </div>
+  </div>
+
+
+
+  <!-- Filtro para Comentarios por Usuario -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+      <h5 class="mb-3" style="color: white">Filtrar Comentarios por Usuario</h5>
+
+      <div class="row g-3 align-items-end">
+        <div class="col-sm-4">
+          <label class="form-label">Desde</label>
+          <input type="date" [(ngModel)]="desde" class="form-control" />
+        </div>
+
+        <div class="col-sm-4">
+          <label class="form-label">Hasta</label>
+          <input type="date" [(ngModel)]="hasta" class="form-control" />
+        </div>
+
+        <div class="col-sm-4">
+          <button class="btn btn-primary w-100" (click)="aplicarFiltroComentario()">Filtrar</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Gráfico Comentarios por Usuario -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="mb-3" style="color: white">Comentarios por usuario</h5>
+      <canvas id="graficoComentariosDia" style="max-width: 600px; max-height: 300px;"></canvas>
+    </div>
+  </div>
+
+
+  <!-- Filtro para Comentarios por Publicación -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+
+      <h5 class="mb-3" style="color: white">Filtrar Comentarios por Publicación</h5>
+
+      <div class="row g-3 align-items-end">
+        <div class="col-sm-4">
+          <label class="form-label">Desde</label>
+          <input type="date" [(ngModel)]="desde" class="form-control" />
+        </div>
+
+        <div class="col-sm-4">
+          <label class="form-label">Hasta</label>
+          <input type="date" [(ngModel)]="hasta" class="form-control" />
+        </div>
+
+        <div class="col-sm-4">
+          <button class="btn btn-primary w-100" (click)="aplicarFiltroComentarioPublicacion()">
+            Filtrar
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Gráfico Comentarios por publicación -->
+  <div class="card shadow-sm mb-5">
+    <div class="card-body">
+      <h5 class="mb-3" style="color: white">Comentarios por publicación</h5>
+      <canvas id="graficoComentariosPublicacion" style="max-width: 600px; max-height: 300px;"></canvas>
+    </div>
+  </div>
+
+</div>
