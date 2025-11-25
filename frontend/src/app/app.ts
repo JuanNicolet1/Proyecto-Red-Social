@@ -31,7 +31,7 @@ export class App implements OnInit{
   if (token) {
     console.log("Validando token...");
 
-    this.http.get(`${this.apiUrl}/autenticacion/autorizar`, {
+    this.http.get(`${this.apiUrlLocal}/autenticacion/autorizar`, {
       headers: { Authorization: `Bearer ${token}` }
     }).subscribe({
       next: (res: any) => {
@@ -58,7 +58,7 @@ export class App implements OnInit{
 
   this.aviso = setTimeout(() => {
     this.mostrarModal = true;
-  }, 10 * 60 * 1000);
+  }, 1 * 60 * 1000);
 }
 
   
@@ -67,7 +67,7 @@ extenderSesion() {
 
   if (!token) return;
 
-  this.http.post(`${this.apiUrl}/autenticacion/refresh`, { token })
+  this.http.post(`${this.apiUrlLocal}/autenticacion/refresh`, { token })
     .subscribe({
       next: (res: any) => {
         const nuevoToken = res.access_token;

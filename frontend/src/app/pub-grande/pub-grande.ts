@@ -41,6 +41,25 @@ export class PubGrande implements OnInit {
     this.mostrarComentarios(this.id);
   }
 
+
+  async comentar(pubId: string, texto: string) {
+    const fechaActual = new Date().toISOString();
+    this.http.post(`${this.apiUrl}/comentarios/${pubId}`, {
+      usuario: this.usuarioActual.username,
+      text: this.texto,
+      edit: this.editado,
+      fecha: fechaActual,
+    }).subscribe({
+      next: (response: any) => {
+        console.log('Comentario enviado:', response);
+        this.editado = true;
+      },
+      error: (err) => {
+        console.error('Error al comentar', err);
+      }
+    });
+  }
+
   cargarPublicacion() {
     this.http.get(`${this.apiUrl}/publicaciones/${this.id}`)
       .subscribe({

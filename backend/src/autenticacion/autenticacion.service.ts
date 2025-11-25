@@ -138,15 +138,12 @@ export class AutenticacionService {
 
     async refresh(token: string): Promise<string> {
       try {
-        // 1. Verificar token (si es inválido o venció, tira error)
         const payload = this.jwtService.verify(token, {
           secret: process.env.JWT_SECRET,
         });
 
-        // 2. Evitar incluir los campos internos
         const { iat, exp, ...data } = payload;
 
-        // 3. Crear nuevo token con el mismo payload
         const nuevoToken = this.jwtService.sign(data, {
           secret: process.env.JWT_SECRET,
           expiresIn: '15m',

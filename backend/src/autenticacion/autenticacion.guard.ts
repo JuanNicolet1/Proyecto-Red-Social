@@ -52,13 +52,10 @@ export class AutenticacionGuard implements CanActivate {
    * @returns El token (string) si se encuentra y tiene el formato correcto, o `undefined` si no.
    */
   private extractTokenFromHeader(request: Request): string | undefined {
-    // Obtenemos el valor del encabezado 'Authorization'. Si no existe, usamos '?? []' para evitar errores.
-    // Usamos ?. (optional chaining) por si 'authorization' no existe.
-    // Hacemos split(' ') para separar "Bearer" del token.
+
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
 
-    // Verificamos si el tipo es 'Bearer' (ignorando mayúsculas/minúsculas podría ser más robusto, pero aquí es estricto).
-    // Si es 'Bearer', devolvemos el token; si no, devolvemos undefined.
+
     return type === 'Bearer' ? token : undefined;
   }
 }
