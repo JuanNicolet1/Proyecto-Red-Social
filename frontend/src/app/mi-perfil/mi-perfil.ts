@@ -1,5 +1,5 @@
 import { Component, OnInit  } from '@angular/core';
-import { Nav } from '../nav/nav';
+import { NavInicio } from '../nav-inicio/nav-inicio';
 import { environment } from '../../environments/environments';
 import { HttpClient } from '@angular/common/http';
 import { Publicacion } from '../publicacion/publicacion';
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mi-perfil',
-  imports: [Nav, Publicacion],
+  imports: [NavInicio, Publicacion],
   templateUrl: './mi-perfil.html',
   styleUrl: './mi-perfil.css',
 })
