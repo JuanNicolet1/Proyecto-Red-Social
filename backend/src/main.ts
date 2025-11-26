@@ -14,7 +14,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const port = parseInt(process.env.FRONTEND_URL ?? '3000') || 3000;
+  const port = parseInt(process.env.PORT || '3000') || 3000;
 await app.listen(port, '0.0.0.0', () => {
   console.log(`Backend corriendo en puerto ${port}`);
 });
