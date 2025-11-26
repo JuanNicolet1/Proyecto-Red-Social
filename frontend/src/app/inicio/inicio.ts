@@ -62,7 +62,7 @@ export class Inicio implements OnInit{
   }
 
    delete(publicacionId: string, user: string) {
-    this.http.delete(`${this.apiUrlLocal}/publicaciones/${publicacionId}/eliminar/${user}`).subscribe({
+    this.http.delete(`${this.apiUrl}/publicaciones/${publicacionId}/eliminar/${user}`).subscribe({
       next: (res) => {
         console.log('Publicación eliminada:', res);
         this.getPublicaciones("fecha");
@@ -72,7 +72,7 @@ export class Inicio implements OnInit{
   }
 
   async getPublicaciones(filtro: string){
-    this.http.get<any[]>(`${this.apiUrlLocal}/publicaciones/${filtro}/filtro`, {
+    this.http.get<any[]>(`${this.apiUrl}/publicaciones/${filtro}/filtro`, {
     params: {
       offset: this.offset,
       limit: this.limit
@@ -113,7 +113,7 @@ export class Inicio implements OnInit{
     const usuarioId = this.usuarioActual._id;
     this.activo = true;
     console.log('ID que se envía al backend:', publicacionId);
-    this.http.delete(`${this.apiUrlLocal}/publicaciones/${publicacionId}/sacar/${usuarioId}`, {}).subscribe({
+    this.http.delete(`${this.apiUrl}/publicaciones/${publicacionId}/sacar/${usuarioId}`, {}).subscribe({
       next: (res) => {
         console.log('Like sacado:', res);
         if(this.filtrar === false){
@@ -129,7 +129,7 @@ export class Inicio implements OnInit{
   }
 
   getPublicacionUsuario(user: string) {
-      this.http.get<any>(`${this.apiUrlLocal}/publicaciones/${user}/usuario`, {
+      this.http.get<any>(`${this.apiUrl}/publicaciones/${user}/usuario`, {
       params: {
         offset: this.offset,
         limit: this.limit
@@ -178,7 +178,7 @@ export class Inicio implements OnInit{
 
   async comentar(pubId: string, texto: string) {
     const fechaActual = new Date().toISOString();
-    this.http.post(`${this.apiUrlLocal}/comentarios/${pubId}`, {
+    this.http.post(`${this.apiUrl}/comentarios/${pubId}`, {
       usuario: this.usuarioActual.username,
       text: this.texto,
       edit: this.editado,
