@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
@@ -41,11 +41,13 @@ export class PublicacionesService {
     async deleteOne(id: string, usuarioSolicitante: string) {
         const publicacion = await this.publicacionModel.findById(id);
 
-       if (!publicacion) {
-            throw new NotFoundException('Publicación no encontrada'); 
+        if (!publicacion) {
+            throw new Error('Publicación no encontrada');
         }
 
-        
+        if (publicacion.usuario !== usuarioSolicitante) {
+            throw new Error('No tienes autorización para eliminar esta publicación');
+        }
         publicacion.activo = false;
 
         return await publicacion.save();
