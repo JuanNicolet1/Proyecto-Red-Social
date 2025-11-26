@@ -26,7 +26,6 @@ export class PublicacionesController {
     }
 
     @Delete(':id/eliminar/:usuario')
-    @UseGuards(AutenticacionGuard)
     async eliminar(
         @Param('id') id: string,
         @Param('usuario') usuario: string
