@@ -143,7 +143,7 @@ export class Register {
 
     
       console.log("a")
-        this.http.post(`${this.apiUrl}/autenticacion/register`, formData 
+        this.http.post(`${this.apiUrlLocal}/autenticacion/register`, formData 
         ).subscribe({
           next: async (response) => {
             this.mensajeExito = "Registro exitoso.";

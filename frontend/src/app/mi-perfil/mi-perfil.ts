@@ -43,7 +43,7 @@ export class MiPerfil implements OnInit{
 
 
   getMiPerfil(id: string) {
-    this.http.get<any>(`${this.apiUrl}/autenticacion/${id}`).subscribe({
+    this.http.get<any>(`${this.apiUrlLocal}/autenticacion/${id}`).subscribe({
       next: (data) => {
         this.usuario = data;
       },
@@ -54,7 +54,7 @@ export class MiPerfil implements OnInit{
   }
 
   getPublicacionUsuario(user: string) {
-    this.http.get<any>(`${this.apiUrl}/publicaciones/${user}/usuario`, {
+    this.http.get<any>(`${this.apiUrlLocal}/publicaciones/${user}/usuario`, {
       params: {
         offset: this.offset,
         limit: this.limit

@@ -45,9 +45,7 @@ export class PublicacionesService {
             throw new Error('Publicación no encontrada');
         }
 
-        if (publicacion.usuario !== usuarioSolicitante) {
-            throw new Error('No tienes autorización para eliminar esta publicación');
-        }
+        
         publicacion.activo = false;
 
         return await publicacion.save();
