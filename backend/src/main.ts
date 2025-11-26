@@ -3,13 +3,19 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:4200';
 
   app.enableCors({
-    origin: allowedOrigin,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: [
+      'https://proyecto-redsocial.onrender.com',
+      'http://localhost:4200',
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
   });
-  await app.listen(process.env.PORT ?? 3000);
+
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
 }
 bootstrap();
+
